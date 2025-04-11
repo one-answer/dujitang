@@ -6,17 +6,22 @@ import {
   QuoteId,
   Button,
   LoadingSpinner,
-  ErrorMessage
+  ErrorMessage,
+  ShareButton
 } from './styled';
 
 const Quote: React.FC = () => {
   const [quote, setQuote] = useState<QuoteResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSharing, setIsSharing] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const getNewQuote = async () => {
-    setLoading(true);
+    setIsRefreshing(true);
     setError(null);
+
+    if (!quote) setLoading(true);
 
     try {
       const newQuote = await fetchQuote();
@@ -26,6 +31,43 @@ const Quote: React.FC = () => {
       console.error(err);
     } finally {
       setLoading(false);
+      setIsRefreshing(false);
+    }
+  };
+
+  const handleShare = () => {
+    setIsSharing(true);
+
+    const quoteText = quote?.data?.content?.content ||
+                      quote?.content ||
+                      quote?.hitokoto ||
+                      quote?.text ||
+                      '暂无鸡汤可供';
+
+    // 创建分享内容
+    const shareText = `【毒鸡汤】${quoteText} - 来自毒鸡汤网站`;
+
+    // 尝试使用 Web Share API
+    if (navigator.share) {
+      navigator.share({
+        title: '毒鸡汤',
+        text: shareText,
+        url: window.location.href,
+      })
+      .then(() => console.log('分享成功'))
+      .catch((error) => console.log('分享失败', error))
+      .finally(() => setIsSharing(false));
+    } else {
+      // 回退到复制到剪贴板
+      navigator.clipboard.writeText(shareText)
+        .then(() => {
+          alert('已复制到剪贴板，快去分享吧！');
+        })
+        .catch((err) => {
+          console.error('复制失败:', err);
+          alert('复制失败，请手动复制。');
+        })
+        .finally(() => setIsSharing(false));
     }
   };
 
@@ -41,7 +83,9 @@ const Quote: React.FC = () => {
     return (
       <>
         <ErrorMessage>{error}</ErrorMessage>
-        <Button onClick={getNewQuote}>重试</Button>
+        <Button onClick={getNewQuote} disabled={isRefreshing}>
+          {isRefreshing ? '加载中...' : '重试'}
+        </Button>
       </>
     );
   }
@@ -65,7 +109,20 @@ const Quote: React.FC = () => {
           </QuoteId>
         </QuoteCard>
       )}
-      <Button onClick={getNewQuote}>再来一碗</Button>
+      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <Button
+          onClick={getNewQuote}
+          disabled={isRefreshing}
+        >
+          {isRefreshing ? '加载中...' : '再来一碗 ↻'}
+        </Button>
+        <ShareButton
+          onClick={handleShare}
+          disabled={isSharing}
+        >
+          {isSharing ? '分享中...' : '分享鸡汤 👌'}
+        </ShareButton>
+      </div>
     </>
   );
 };
