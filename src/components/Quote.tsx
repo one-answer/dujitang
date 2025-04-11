@@ -109,7 +109,15 @@ const Quote: React.FC = () => {
           </QuoteId>
         </QuoteCard>
       )}
-      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+      <div style={{
+        display: 'flex',
+        gap: '1rem',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        width: '100%',
+        maxWidth: '100%',
+        margin: '0 auto'
+      }}>
         <Button
           onClick={getNewQuote}
           disabled={isRefreshing}

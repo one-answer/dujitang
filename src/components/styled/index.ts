@@ -19,12 +19,43 @@ export const GlobalStyle = createGlobalStyle`
     --error-color: #E74C3C;
     --gradient-start: #6A11CB;
     --gradient-end: #2575FC;
+
+    /* 响应式断点 */
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --breakpoint-xxl: 1400px;
+
+    /* 容器宽度 */
+    --container-sm: 540px;
+    --container-md: 720px;
+    --container-lg: 960px;
+    --container-xl: 1140px;
+    --container-xxl: 1320px;
+
+    /* 字体大小响应式调整 */
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-sm: 14px;
+
+    @media (max-width: 768px) {
+      --font-size-base: 14px;
+      --font-size-lg: 16px;
+      --font-size-sm: 12px;
+    }
   }
 
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+  }
+
+  html {
+    font-size: var(--font-size-base);
+    scroll-behavior: smooth;
   }
 
   body {
@@ -39,9 +70,30 @@ export const GlobalStyle = createGlobalStyle`
     overflow-x: hidden;
     transition: opacity 0.5s ease;
     opacity: 0.4;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
 
     &.loaded {
       opacity: 1;
+    }
+  }
+
+  /* 响应式图片 */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* 响应式表格 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-x: auto;
+    display: block;
+
+    @media (min-width: 768px) {
+      display: table;
     }
   }
 
@@ -76,6 +128,8 @@ export const AppContainer = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
   padding: 2rem;
   background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
   position: relative;
@@ -98,8 +152,35 @@ export const AppContainer = styled.div`
     z-index: 0;
   }
 
-  @media (max-width: 768px) {
-    padding: 1rem;
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    padding: 3rem;
+  }
+
+  /* 平板电脑 */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    padding: 2.5rem;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    padding: 2rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    padding: 1.5rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    padding: 1rem 0.75rem;
+  }
+
+  /* 横屏和竖屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    padding: 0.75rem;
+    justify-content: flex-start;
   }
 `;
 
@@ -116,6 +197,46 @@ export const Header = styled.header`
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
+
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    max-width: var(--container-xl);
+    padding: 2rem;
+  }
+
+  /* 平板电脑 */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    max-width: var(--container-lg);
+    padding: 1.75rem;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    max-width: var(--container-md);
+    padding: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    max-width: var(--container-sm);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    width: calc(100% - 1rem);
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+    border-radius: 12px;
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
 `;
 
 const titleAnimation = keyframes`
@@ -139,8 +260,36 @@ export const Title = styled.h1`
   text-shadow: none;
   letter-spacing: -1px;
 
-  @media (max-width: 768px) {
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    font-size: 4rem;
+  }
+
+  /* 平板电脑 */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    font-size: 3.5rem;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    font-size: 3rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
     font-size: 2.5rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    font-size: 2rem;
+    letter-spacing: -0.5px;
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
   }
 `;
 
@@ -152,15 +301,42 @@ export const Subtitle = styled.p`
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   margin-top: 0.5rem;
 
-  @media (max-width: 768px) {
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    font-size: 1.5rem;
+  }
+
+  /* 平板电脑 */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    font-size: 1.3rem;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    font-size: 1.2rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
     font-size: 1.1rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    font-size: 1rem;
+    margin-top: 0.25rem;
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    font-size: 0.9rem;
+    margin-top: 0.1rem;
   }
 `;
 
 // Main content area
 export const MainContent = styled.main`
   width: 100%;
-  max-width: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -168,8 +344,38 @@ export const MainContent = styled.main`
   z-index: 1;
   padding: 1rem;
 
-  @media (max-width: 768px) {
-    max-width: 100%;
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    max-width: var(--container-xl);
+    padding: 1.5rem;
+  }
+
+  /* 平板电脑 */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    max-width: var(--container-lg);
+    padding: 1.25rem;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    max-width: var(--container-md);
+    padding: 1rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    max-width: var(--container-sm);
+    padding: 0.75rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    width: 100%;
+    padding: 0.5rem;
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
     padding: 0.5rem;
   }
 `;
@@ -241,8 +447,64 @@ export const QuoteCard = styled.div`
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   }
 
-  @media (max-width: 768px) {
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    padding: 3rem;
+    max-width: 900px;
+  }
+
+  /* 平板电脑 */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    padding: 2.5rem;
+    max-width: 800px;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    padding: 2rem;
+    max-width: 700px;
+    margin-bottom: 2rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    padding: 1.75rem;
+    border-radius: 16px;
+    margin-bottom: 1.75rem;
+
+    &::before, &::after {
+      font-size: 120px;
+    }
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
     padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    animation: ${fadeIn} 0.6s ease-out, ${float} 4s ease-in-out infinite;
+
+    &::before {
+      font-size: 100px;
+      top: -10px;
+      left: 10px;
+    }
+
+    &::after {
+      font-size: 100px;
+      bottom: -70px;
+      right: 10px;
+    }
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    &::before, &::after {
+      display: none;
+    }
   }
 `;
 
@@ -257,9 +519,42 @@ export const QuoteText = styled.p`
   z-index: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
-  @media (max-width: 768px) {
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    font-size: 2rem;
+    line-height: 1.8;
+  }
+
+  /* 平板电脑 */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    font-size: 1.8rem;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    font-size: 1.6rem;
+    margin-bottom: 1.75rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
     font-size: 1.4rem;
     line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    margin-bottom: 0.75rem;
   }
 `;
 
@@ -277,6 +572,35 @@ export const QuoteId = styled.span`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   opacity: 0.8;
+
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    font-size: 1rem;
+    margin-top: 1.25rem;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    margin-top: 0.75rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
 `;
 
 // Button animation
@@ -344,9 +668,43 @@ export const Button = styled.button`
     box-shadow: none;
   }
 
-  @media (max-width: 768px) {
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    padding: 1.1rem 2.75rem;
+    font-size: 1.3rem;
+  }
+
+  /* 平板电脑 */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    padding: 1rem 2.5rem;
+    font-size: 1.2rem;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    padding: 0.9rem 2.25rem;
+    font-size: 1.15rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
     padding: 0.8rem 2rem;
     font-size: 1.1rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    padding: 0.7rem 1.75rem;
+    font-size: 1rem;
+    border-radius: 25px;
+    animation: ${pulse} 3s infinite;
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    animation: none;
   }
 `;
 
@@ -389,6 +747,41 @@ export const Footer = styled.footer`
       transform-origin: left;
     }
   }
+
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    padding: 1.75rem;
+    font-size: 1rem;
+  }
+
+  /* 平板电脑 */
+  @media (min-width: 992px) and (max-width: 1199px) {
+    padding: 1.5rem;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    padding: 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
 `;
 
 // Loading spinner animations
@@ -411,6 +804,42 @@ export const LoadingSpinner = styled.div`
   animation: ${spin} 1s linear infinite, ${breathe} 2s ease infinite;
   margin: 3rem auto;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    width: 60px;
+    height: 60px;
+    border-width: 5px;
+    margin: 4rem auto;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    margin: 2.5rem auto;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    width: 45px;
+    height: 45px;
+    margin: 2rem auto;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    width: 40px;
+    height: 40px;
+    border-width: 3px;
+    margin: 1.5rem auto;
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    width: 30px;
+    height: 30px;
+    border-width: 3px;
+    margin: 1rem auto;
+  }
 `;
 
 // Error message
@@ -435,6 +864,59 @@ export const ErrorMessage = styled.div`
     font-size: 2rem;
     margin-bottom: 0.5rem;
   }
+
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    padding: 1.75rem;
+    border-radius: 16px;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+
+    &::before {
+      font-size: 2.5rem;
+    }
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    padding: 1.25rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+
+    &::before {
+      font-size: 1.75rem;
+    }
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+
+    &::before {
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-direction: row;
+    justify-content: center;
+
+    &::before {
+      font-size: 1.25rem;
+      margin-bottom: 0;
+      margin-right: 0.5rem;
+    }
+  }
 `;
 
 // Share button
@@ -452,5 +934,37 @@ export const ShareButton = styled(Button)`
 
   &:hover {
     box-shadow: 0 7px 20px rgba(37, 211, 102, 0.6);
+  }
+
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    padding: 0.8rem 1.75rem;
+    font-size: 1.1rem;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    padding: 0.65rem 1.4rem;
+    font-size: 0.95rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+
+  /* 横屏适配 */
+  @media (orientation: landscape) and (max-height: 500px) {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
   }
 `;
