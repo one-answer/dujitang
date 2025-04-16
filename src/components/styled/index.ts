@@ -936,7 +936,7 @@ export const ToggleContainer = styled.div`
   justify-content: center;
   margin-bottom: 1.5rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
   border-radius: 50px;
   background: rgba(255, 255, 255, 0.1);
   padding: 0.3rem;
@@ -945,22 +945,25 @@ export const ToggleContainer = styled.div`
 
   /* 大屏幕设备 */
   @media (min-width: 1200px) {
-    max-width: 450px;
+    max-width: 650px;
   }
 
   /* 平板 */
   @media (min-width: 768px) and (max-width: 991px) {
-    max-width: 380px;
+    max-width: 580px;
   }
 
   /* 大手机 */
   @media (min-width: 576px) and (max-width: 767px) {
-    max-width: 350px;
+    max-width: 500px;
   }
 
   /* 小手机 */
   @media (max-width: 575px) {
-    max-width: 300px;
+    max-width: 100%;
+    padding: 0.25rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
   }
 `;
 
@@ -971,7 +974,7 @@ export const ToggleButton = styled.button<{ active: boolean }>`
   color: ${props => props.active ? 'white' : 'rgba(255, 255, 255, 0.7)'};
   border: none;
   border-radius: 50px;
-  padding: 0.6rem 1rem;
+  padding: 0.6rem 0.8rem;
   font-size: 1rem;
   font-weight: ${props => props.active ? '700' : '500'};
   cursor: pointer;
@@ -990,10 +993,22 @@ export const ToggleButton = styled.button<{ active: boolean }>`
     font-size: 1.1rem;
   }
 
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.95rem;
+  }
+
   /* 小手机 */
   @media (max-width: 575px) {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.9rem;
+    padding: 0.5rem 0.4rem;
+    font-size: 0.8rem;
   }
 `;
 

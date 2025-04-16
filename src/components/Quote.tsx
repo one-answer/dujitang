@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchQuote, QuoteResponse } from '../services/quoteService';
 import { fetchFunnyQuote, FunnyQuoteResponse } from '../services/funnyQuoteService';
+import { fetchKFCQuote, KFCQuoteResponse } from '../services/kfcQuoteService';
 import {
   QuoteCard,
   QuoteText,
@@ -16,17 +17,18 @@ import {
 const Quote: React.FC = () => {
   const [quote, setQuote] = useState<QuoteResponse | null>(null);
   const [funnyQuote, setFunnyQuote] = useState<FunnyQuoteResponse | null>(null);
+  const [kfcQuote, setKFCQuote] = useState<KFCQuoteResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-  const [quoteType, setQuoteType] = useState<'poison' | 'funny'>('poison'); // 默认显示毒鸡汤
+  const [quoteType, setQuoteType] = useState<'poison' | 'funny' | 'kfc'>('poison'); // 默认显示毒鸡汤
 
   const getNewQuote = async () => {
     setIsRefreshing(true);
     setError(null);
 
-    if ((!quote && quoteType === 'poison') || (!funnyQuote && quoteType === 'funny')) {
+    if ((!quote && quoteType === 'poison') || (!funnyQuote && quoteType === 'funny') || (!kfcQuote && quoteType === 'kfc')) {
       setLoading(true);
     }
 
@@ -34,12 +36,23 @@ const Quote: React.FC = () => {
       if (quoteType === 'poison') {
         const newQuote = await fetchQuote();
         setQuote(newQuote);
-      } else {
+      } else if (quoteType === 'funny') {
         const newFunnyQuote = await fetchFunnyQuote();
         setFunnyQuote(newFunnyQuote);
+      } else if (quoteType === 'kfc') {
+        const newKFCQuote = await fetchKFCQuote();
+        setKFCQuote(newKFCQuote);
       }
     } catch (err) {
-      setError(quoteType === 'poison' ? '获取鸡汤失败，请稍后再试！' : '获取搞笑文案失败，请稍后再试！');
+      let errorMessage = '获取数据失败，请稍后再试！';
+      if (quoteType === 'poison') {
+        errorMessage = '获取鸡汤失败，请稍后再试！';
+      } else if (quoteType === 'funny') {
+        errorMessage = '获取搞笑文案失败，请稍后再试！';
+      } else if (quoteType === 'kfc') {
+        errorMessage = '获取疯狂星期四文案失败，请稍后再试！';
+      }
+      setError(errorMessage);
       console.error(err);
     } finally {
       setLoading(false);
@@ -47,18 +60,14 @@ const Quote: React.FC = () => {
     }
   };
 
-  // 切换毒鸡汤和搞笑文案
-  const toggleQuoteType = () => {
-    setQuoteType(prevType => {
-      const newType = prevType === 'poison' ? 'funny' : 'poison';
+  // 切换毒鸡汤、搞笑文案和疯狂星期四文案
+  const setQuoteTypeAndLoad = (type: 'poison' | 'funny' | 'kfc') => {
+    setQuoteType(type);
 
-      // 如果切换到的类型还没有数据，则加载新数据
-      if ((newType === 'poison' && !quote) || (newType === 'funny' && !funnyQuote)) {
-        setTimeout(() => getNewQuote(), 0);
-      }
-
-      return newType;
-    });
+    // 如果切换到的类型还没有数据，则加载新数据
+    if ((type === 'poison' && !quote) || (type === 'funny' && !funnyQuote) || (type === 'kfc' && !kfcQuote)) {
+      setTimeout(() => getNewQuote(), 0);
+    }
   };
 
   const handleShare = () => {
@@ -74,10 +83,14 @@ const Quote: React.FC = () => {
                         '暂无鸡汤可供';
       // 创建分享内容
       shareText = `【毒鸡汤】${quoteText} - 来自毒鸡汤网站`;
-    } else {
+    } else if (quoteType === 'funny') {
       const funnyText = funnyQuote?.msg || '暂无搞笑文案可供';
       // 创建分享内容
       shareText = `【搞笑文案】${funnyText} - 来自毒鸡汤网站`;
+    } else if (quoteType === 'kfc') {
+      const kfcText = kfcQuote?.data || '暂无疯狂星期四文案可供';
+      // 创建分享内容
+      shareText = `【疯狂星期四】${kfcText} - 来自毒鸡汤网站`;
     }
 
     // 尝试使用 Web Share API
@@ -108,19 +121,24 @@ const Quote: React.FC = () => {
     // 默认加载毒鸡汤
     getNewQuote();
 
-    // 预加载搞笑文案，但不显示
-    const preloadFunnyQuote = async () => {
+    // 预加载其他类型的文案，但不显示
+    const preloadOtherQuotes = async () => {
       try {
+        // 预加载搞笑文案
         const newFunnyQuote = await fetchFunnyQuote();
         setFunnyQuote(newFunnyQuote);
+
+        // 预加载疯狂星期四文案
+        const newKFCQuote = await fetchKFCQuote();
+        setKFCQuote(newKFCQuote);
       } catch (err) {
-        console.error('Preloading funny quote failed:', err);
+        console.error('Preloading other quotes failed:', err);
       }
     };
 
-    // 延迟加载搞笑文案，以便先显示毒鸡汤
+    // 延迟加载其他文案，以便先显示毒鸡汤
     const timer = setTimeout(() => {
-      preloadFunnyQuote();
+      preloadOtherQuotes();
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -146,15 +164,21 @@ const Quote: React.FC = () => {
       <ToggleContainer>
         <ToggleButton
           active={quoteType === 'poison'}
-          onClick={() => quoteType !== 'poison' && toggleQuoteType()}
+          onClick={() => quoteType !== 'poison' && setQuoteTypeAndLoad('poison')}
         >
           毒鸡汤
         </ToggleButton>
         <ToggleButton
           active={quoteType === 'funny'}
-          onClick={() => quoteType !== 'funny' && toggleQuoteType()}
+          onClick={() => quoteType !== 'funny' && setQuoteTypeAndLoad('funny')}
         >
           搞笑文案
+        </ToggleButton>
+        <ToggleButton
+          active={quoteType === 'kfc'}
+          onClick={() => quoteType !== 'kfc' && setQuoteTypeAndLoad('kfc')}
+        >
+          疯狂星期四
         </ToggleButton>
       </ToggleContainer>
 
@@ -186,6 +210,17 @@ const Quote: React.FC = () => {
           </QuoteId>
         </QuoteCard>
       )}
+
+      {quoteType === 'kfc' && kfcQuote && (
+        <QuoteCard>
+          <QuoteText>
+            {kfcQuote.data || '暂无疯狂星期四文案可供'}
+          </QuoteText>
+          <QuoteId>
+            疯狂星期四
+          </QuoteId>
+        </QuoteCard>
+      )}
       <div style={{
         display: 'flex',
         gap: '1rem',
@@ -205,7 +240,10 @@ const Quote: React.FC = () => {
           onClick={handleShare}
           disabled={isSharing}
         >
-          {isSharing ? '分享中...' : quoteType === 'poison' ? '分享鸡汤 👌' : '分享文案 👌'}
+          {isSharing ? '分享中...' :
+           quoteType === 'poison' ? '分享鸡汤 👌' :
+           quoteType === 'funny' ? '分享文案 👌' :
+           '分享星期四 👌'}
         </ShareButton>
       </div>
     </>
