@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchQuote, QuoteResponse } from '../services/quoteService';
+import { fetchFunnyQuote, FunnyQuoteResponse } from '../services/funnyQuoteService';
 import {
   QuoteCard,
   QuoteText,
@@ -7,27 +8,38 @@ import {
   Button,
   LoadingSpinner,
   ErrorMessage,
-  ShareButton
+  ShareButton,
+  ToggleButton,
+  ToggleContainer
 } from './styled';
 
 const Quote: React.FC = () => {
   const [quote, setQuote] = useState<QuoteResponse | null>(null);
+  const [funnyQuote, setFunnyQuote] = useState<FunnyQuoteResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [quoteType, setQuoteType] = useState<'poison' | 'funny'>('poison'); // 默认显示毒鸡汤
 
   const getNewQuote = async () => {
     setIsRefreshing(true);
     setError(null);
 
-    if (!quote) setLoading(true);
+    if ((!quote && quoteType === 'poison') || (!funnyQuote && quoteType === 'funny')) {
+      setLoading(true);
+    }
 
     try {
-      const newQuote = await fetchQuote();
-      setQuote(newQuote);
+      if (quoteType === 'poison') {
+        const newQuote = await fetchQuote();
+        setQuote(newQuote);
+      } else {
+        const newFunnyQuote = await fetchFunnyQuote();
+        setFunnyQuote(newFunnyQuote);
+      }
     } catch (err) {
-      setError('获取鸡汤失败，请稍后再试！');
+      setError(quoteType === 'poison' ? '获取鸡汤失败，请稍后再试！' : '获取搞笑文案失败，请稍后再试！');
       console.error(err);
     } finally {
       setLoading(false);
@@ -35,17 +47,38 @@ const Quote: React.FC = () => {
     }
   };
 
+  // 切换毒鸡汤和搞笑文案
+  const toggleQuoteType = () => {
+    setQuoteType(prevType => {
+      const newType = prevType === 'poison' ? 'funny' : 'poison';
+
+      // 如果切换到的类型还没有数据，则加载新数据
+      if ((newType === 'poison' && !quote) || (newType === 'funny' && !funnyQuote)) {
+        setTimeout(() => getNewQuote(), 0);
+      }
+
+      return newType;
+    });
+  };
+
   const handleShare = () => {
     setIsSharing(true);
 
-    const quoteText = quote?.data?.content?.content ||
-                      quote?.content ||
-                      quote?.hitokoto ||
-                      quote?.text ||
-                      '暂无鸡汤可供';
+    let shareText = '';
 
-    // 创建分享内容
-    const shareText = `【毒鸡汤】${quoteText} - 来自毒鸡汤网站`;
+    if (quoteType === 'poison') {
+      const quoteText = quote?.data?.content?.content ||
+                        quote?.content ||
+                        quote?.hitokoto ||
+                        quote?.text ||
+                        '暂无鸡汤可供';
+      // 创建分享内容
+      shareText = `【毒鸡汤】${quoteText} - 来自毒鸡汤网站`;
+    } else {
+      const funnyText = funnyQuote?.msg || '暂无搞笑文案可供';
+      // 创建分享内容
+      shareText = `【搞笑文案】${funnyText} - 来自毒鸡汤网站`;
+    }
 
     // 尝试使用 Web Share API
     if (navigator.share) {
@@ -72,7 +105,25 @@ const Quote: React.FC = () => {
   };
 
   useEffect(() => {
+    // 默认加载毒鸡汤
     getNewQuote();
+
+    // 预加载搞笑文案，但不显示
+    const preloadFunnyQuote = async () => {
+      try {
+        const newFunnyQuote = await fetchFunnyQuote();
+        setFunnyQuote(newFunnyQuote);
+      } catch (err) {
+        console.error('Preloading funny quote failed:', err);
+      }
+    };
+
+    // 延迟加载搞笑文案，以便先显示毒鸡汤
+    const timer = setTimeout(() => {
+      preloadFunnyQuote();
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   if (loading) {
@@ -92,7 +143,22 @@ const Quote: React.FC = () => {
 
   return (
     <>
-      {quote && (
+      <ToggleContainer>
+        <ToggleButton
+          active={quoteType === 'poison'}
+          onClick={() => quoteType !== 'poison' && toggleQuoteType()}
+        >
+          毒鸡汤
+        </ToggleButton>
+        <ToggleButton
+          active={quoteType === 'funny'}
+          onClick={() => quoteType !== 'funny' && toggleQuoteType()}
+        >
+          搞笑文案
+        </ToggleButton>
+      </ToggleContainer>
+
+      {quoteType === 'poison' && quote && (
         <QuoteCard>
           <QuoteText>
             {/* Handle different possible response formats */}
@@ -106,6 +172,17 @@ const Quote: React.FC = () => {
             #{quote.data?.content?.id ||
                quote.id ||
                '未知'}
+          </QuoteId>
+        </QuoteCard>
+      )}
+
+      {quoteType === 'funny' && funnyQuote && (
+        <QuoteCard>
+          <QuoteText>
+            {funnyQuote.msg || '暂无搞笑文案可供'}
+          </QuoteText>
+          <QuoteId>
+            搞笑文案
           </QuoteId>
         </QuoteCard>
       )}
@@ -128,7 +205,7 @@ const Quote: React.FC = () => {
           onClick={handleShare}
           disabled={isSharing}
         >
-          {isSharing ? '分享中...' : '分享鸡汤 👌'}
+          {isSharing ? '分享中...' : quoteType === 'poison' ? '分享鸡汤 👌' : '分享文案 👌'}
         </ShareButton>
       </div>
     </>

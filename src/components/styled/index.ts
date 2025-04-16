@@ -930,6 +930,73 @@ export const ErrorMessage = styled.div`
   }
 `;
 
+// Toggle container
+export const ToggleContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.3rem;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    max-width: 450px;
+  }
+
+  /* 平板 */
+  @media (min-width: 768px) and (max-width: 991px) {
+    max-width: 380px;
+  }
+
+  /* 大手机 */
+  @media (min-width: 576px) and (max-width: 767px) {
+    max-width: 350px;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    max-width: 300px;
+  }
+`;
+
+// Toggle button
+export const ToggleButton = styled.button<{ active: boolean }>`
+  flex: 1;
+  background: ${props => props.active ? 'linear-gradient(45deg, var(--accent-color), var(--primary-color))' : 'transparent'};
+  color: ${props => props.active ? 'white' : 'rgba(255, 255, 255, 0.7)'};
+  border: none;
+  border-radius: 50px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  font-weight: ${props => props.active ? '700' : '500'};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+
+  &:hover {
+    color: white;
+  }
+
+  /* 大屏幕设备 */
+  @media (min-width: 1200px) {
+    padding: 0.7rem 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  /* 小手机 */
+  @media (max-width: 575px) {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+  }
+`;
+
 // Share button
 export const ShareButton = styled(Button)`
   background: linear-gradient(45deg, #70A1FF, #5352ED);

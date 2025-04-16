@@ -68,7 +68,7 @@ const App: React.FC = () => {
       <AppContainer className={mounted ? 'mounted' : ''}>
         <Header>
           <Title>毒鸡汤</Title>
-          <Subtitle>有毒，但是很有道理</Subtitle>
+          <Subtitle>有毒有笑，可以切换哦</Subtitle>
         </Header>
         <MainContent>
           <Quote />
