@@ -1,54 +1,116 @@
-# React + TypeScript + Vite
+# 毒鸡汤网站
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个基于 React + TypeScript + Vite 构建的现代化网站，提供毒鸡汤、安慰文案和肯德基疯狂星期四文案，满足不同场景下的文案需求。
 
-Currently, two official plugins are available:
+## 功能特点
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **多种文案类型**：
+  - 毒鸡汤：有毒但有道理的鸡汤文案
+  - 安慰文案：温暖人心的安慰话语
+  - 肯德基疯狂星期四文案：搞笑的肯德基疯狂星期四文案
 
-## Expanding the ESLint configuration
+- **现代化设计**：
+  - 响应式布局，适配各种设备尺寸（PC、平板、手机）
+  - 优雅的动画和过渡效果
+  - 玻璃态设计风格
+  - 柔和的紫色主题
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **用户友好功能**：
+  - 一键切换不同类型的文案
+  - 一键分享功能
+  - 一键刷新获取新文案
+  - 加载状态和错误处理
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 技术栈
+
+- **前端框架**：React 18
+- **开发语言**：TypeScript
+- **构建工具**：Vite
+- **样式解决方案**：Styled Components
+- **API 调用**：Fetch API
+
+## API 接口
+
+网站使用了以下三个 API 接口：
+
+1. **毒鸡汤接口**：
+   - URL: `https://kaiwu.xxlb.org/api/jitang`
+   - 返回示例：
+   ```json
+   {
+     "data": {
+       "content": {
+         "id": 2595,
+         "content": "总是情不自禁的忧伤，于是慢慢学会了掩藏，因为不想被人再刺伤，所以渐渐学会了伪装。",
+         "created_at": "2025-04-10 07:27:25",
+         "updated_at": "2025-04-10 07:27:25"
+       }
+     },
+     "status": 1,
+     "msg": "毒鸡汤数据获取成功！"
+   }
+   ```
+
+2. **安慰文案接口**：
+   - URL: `https://v.api.aa1.cn/api/api-wenan-anwei/index.php?type=json`
+   - 返回示例（需要从返回的 HTML 中提取 JSON）：
+   ```json
+   {"anwei":"你什么时候放下，什么时候就没有烦恼。"}
+   ```
+
+3. **肯德基疯狂星期四文案接口**：
+   - URL: `https://tools.mgtv100.com/external/v1/pear/kfc`
+   - 返回示例：
+   ```json
+   {
+     "status": "success",
+     "code": 200,
+     "data": "你好，我是高中生侦探工藤新一，我刚在游乐场被打晕，被黑衣组织强迫灌下了APTX-4869，现在身体竟然变成了小孩子，目前我吃了灰原哀开发的解药试作品JUFD-866、TAMA-028、STAR-907、VGD-193、PX-177、IPX-192、SSNI-290都起不到作用，现在听说肯德基疯狂星期四29.9元的吮指原味鸡有特殊作用，希望大家能够帮我一忙，事成后我让怪盗基德给你搞几个宝石。"
+   }
+   ```
+
+## 如何运行
+
+1. 克隆仓库：
+   ```bash
+   git clone https://github.com/yourusername/dujitang.git
+   cd dujitang
+   ```
+
+2. 安装依赖：
+   ```bash
+   npm install
+   ```
+
+3. 启动开发服务器：
+   ```bash
+   npm run dev
+   ```
+
+4. 构建生产版本：
+   ```bash
+   npm run build
+   ```
+
+## 项目结构
+
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+dujitang/
+├── public/
+│   └── soup.svg
+├── src/
+│   ├── components/
+│   │   ├── Quote.tsx
+│   │   └── styled/
+│   │       └── index.ts
+│   ├── services/
+│   │   ├── api.ts
+│   │   ├── quoteService.ts
+│   │   ├── comfortQuoteService.ts
+│   │   └── kfcQuoteService.ts
+│   ├── App.tsx
+│   └── main.tsx
+├── index.html
+├── package.json
+└── tsconfig.json
 ```
