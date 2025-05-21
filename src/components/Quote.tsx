@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchQuote, QuoteResponse } from '../services/quoteService';
 import { fetchComfortQuote, ComfortQuoteResponse } from '../services/comfortQuoteService';
 import { fetchKFCQuote, KFCQuoteResponse } from '../services/kfcQuoteService';
+import SEO from './SEO';
 import {
   QuoteCard,
   QuoteText,
@@ -82,15 +83,15 @@ const Quote: React.FC = () => {
                         quote?.text ||
                         '暂无鸡汤可供';
       // 创建分享内容
-      shareText = `【毒鸡汤】${quoteText} - 来自毒鸡汤网站`;
+      shareText = `【毒鸡汤】${quoteText} - 来自 https://djt.aolifu.org`;
     } else if (quoteType === 'comfort') {
       const comfortText = comfortQuote?.anwei || '暂无安慰文案可供';
       // 创建分享内容
-      shareText = `【安慰文案】${comfortText} - 来自毒鸡汤网站`;
+      shareText = `【安慰文案】${comfortText} - 来自 https://djt.aolifu.org`;
     } else if (quoteType === 'kfc') {
       const kfcText = kfcQuote?.data || '暂无疯狂星期四文案可供';
       // 创建分享内容
-      shareText = `【疯狂星期四】${kfcText} - 来自毒鸡汤网站`;
+      shareText = `【疯狂星期四】${kfcText} - 来自 https://djt.aolifu.org`;
     }
 
     // 尝试使用 Web Share API
@@ -144,6 +145,18 @@ const Quote: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // 获取当前显示的引用内容
+  const getCurrentQuoteContent = () => {
+    if (quoteType === 'poison' && quote) {
+      return quote.data?.content?.content || quote.content || quote.hitokoto || quote.text || '';
+    } else if (quoteType === 'comfort' && comfortQuote) {
+      return comfortQuote.anwei || '';
+    } else if (quoteType === 'kfc' && kfcQuote) {
+      return kfcQuote.data || '';
+    }
+    return '';
+  };
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -159,8 +172,29 @@ const Quote: React.FC = () => {
     );
   }
 
+  // 获取当前引用内容用于SEO
+  const currentQuoteContent = getCurrentQuoteContent();
+
+  // 根据引用类型生成SEO标题
+  const getSEOTitle = () => {
+    if (quoteType === 'poison') {
+      return `毒鸡汤 - ${currentQuoteContent.substring(0, 20)}... | 有毒但有道理的心灵鸡汤`;
+    } else if (quoteType === 'comfort') {
+      return `安慰文案 - ${currentQuoteContent.substring(0, 20)}... | 毒鸡汤网站`;
+    } else if (quoteType === 'kfc') {
+      return `疯狂星期四文案 - ${currentQuoteContent.substring(0, 20)}... | 毒鸡汤网站`;
+    }
+    return '毒鸡汤 - 有毒但有道理的心灵鸡汤 | 安慰文案 | 疯狂星期四文案';
+  };
+
   return (
     <>
+      {/* 动态SEO更新 */}
+      <SEO
+        title={getSEOTitle()}
+        quoteType={quoteType}
+        quoteContent={currentQuoteContent}
+      />
       <ToggleContainer>
         <ToggleButton
           active={quoteType === 'poison'}

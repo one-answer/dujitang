@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Quote from './components/Quote';
+import SEO from './components/SEO';
 import {
   AppContainer,
   GlobalStyle,
@@ -64,6 +65,11 @@ const App: React.FC = () => {
 
   return (
     <>
+      <SEO
+        title="毒鸡汤 - 有毒但有道理的心灵鸡汤 | 安慰文案 | 疯狂星期四文案"
+        description="毒鸡汤、安慰文案、疯狂星期四文案，一网打尽，每日更新，治愈你的心灵"
+        keywords="毒鸡汤,心灵鸡汤,安慰文案,疯狂星期四,肯德基文案,KFC文案,心灵治愈,文案生成,毒鸡汤网站"
+      />
       <GlobalStyle />
       <AppContainer className={mounted ? 'mounted' : ''}>
         <Header>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7158E2" />
+      <stop offset="100%" stop-color="#A55EEA" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    <linearGradient id="titleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#f0f0ff" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)" />
+  
+  <!-- Decorative elements -->
+  <circle cx="300" cy="200" r="100" fill="#8C7AE6" opacity="0.2" />
+  <circle cx="900" cy="450" r="150" fill="#8C7AE6" opacity="0.2" />
+  <circle cx="500" cy="150" r="60" fill="#ffffff" opacity="0.1" />
+  <circle cx="200" cy="450" r="80" fill="#ffffff" opacity="0.1" />
+  <circle cx="1000" cy="250" r="70" fill="#ffffff" opacity="0.1" />
+  
+  <!-- Soup bowl icon -->
+  <g transform="translate(450, 180) scale(0.9)" filter="url(#shadow)">
+    <!-- Bowl -->
+    <ellipse cx="100" cy="150" rx="100" ry="40" fill="#f5f5f5" />
+    <path d="M0,150 C0,110 45,80 100,80 C155,80 200,110 200,150 C200,150 200,150 200,150" fill="none" stroke="#f5f5f5" stroke-width="10" />
+    
+    <!-- Soup -->
+    <ellipse cx="100" cy="150" rx="90" ry="30" fill="#9C88FF" />
+    
+    <!-- Steam -->
+    <path d="M70,80 C70,60 60,60 60,40 C60,20 80,20 80,40 C80,60 70,60 70,80" fill="none" stroke="#f5f5f5" stroke-width="6" stroke-linecap="round" />
+    <path d="M100,70 C100,50 90,50 90,30 C90,10 110,10 110,30 C110,50 100,50 100,70" fill="none" stroke="#f5f5f5" stroke-width="6" stroke-linecap="round" />
+    <path d="M130,80 C130,60 120,60 120,40 C120,20 140,20 140,40 C140,60 130,60 130,80" fill="none" stroke="#f5f5f5" stroke-width="6" stroke-linecap="round" />
+  </g>
+  
+  <!-- Title -->
+  <text x="600" y="400" font-family="'Noto Sans SC', sans-serif, Arial" font-size="80" font-weight="bold" text-anchor="middle" fill="url(#titleGradient)" filter="url(#shadow)">毒鸡汤</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="470" font-family="'Noto Sans SC', sans-serif, Arial" font-size="36" text-anchor="middle" fill="#ffffff" opacity="0.9">有毒但有道理的心灵鸡汤</text>
+  
+  <!-- Features -->
+  <text x="600" y="530" font-family="'Noto Sans SC', sans-serif, Arial" font-size="28" text-anchor="middle" fill="#ffffff" opacity="0.8">每日更新 · 治愈你的心灵</text>
+  
+  <!-- URL -->
+  <text x="600" y="590" font-family="'Noto Sans SC', sans-serif, Arial" font-size="24" text-anchor="middle" fill="#ffffff" opacity="0.7">djt.aolifu.org</text>
+</svg>
